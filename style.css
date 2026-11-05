@@ -158,3 +158,56 @@ kbd {
 #restart-btn:hover {
   background: #9bbdff;
 }
+
+/* ---- Records: inicio ---- */
+[hidden] { display: none !important; }
+
+#records-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+#records-entry {
+  display: flex;
+  gap: 6px;
+}
+
+#records-name {
+  background: #22223a;
+  border: 1px solid #3a3a5a;
+  border-radius: 4px;
+  color: #e0e0e0;
+  padding: 6px 8px;
+  width: 120px;
+  user-select: text;
+}
+
+#records-save, #records-reset {
+  background: #22223a;
+  color: #aaa;
+  border: 1px solid #3a3a5a;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#records-save { color: #0f0f17; background: #98c379; border: none; font-weight: 700; }
+
+#records-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #888;
+}
+
+#records-list li { padding: 2px 8px; border-radius: 3px; }
+#records-list li.new { background: #7aa2f7; color: #0f0f17; font-weight: 700; }
+#records-list li.empty { font-style: italic; }
+#records-stats { color: #7aa2f7; font-size: 11px; }
+/* ---- Records: fin ---- */
