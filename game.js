@@ -42,6 +42,7 @@ const overlayTitle = document.getElementById('overlay-title');
 const overlayScore = document.getElementById('overlay-score');
 const restartBtn = document.getElementById('restart-btn');
 
+let startLevel = 1;
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
 
 function createBoard() {
@@ -108,7 +109,7 @@ function clearLines() {
   if (cleared) {
     lines += cleared;
     score += (LINE_SCORES[cleared] || 0) * level;
-    level = Math.floor(lines / 10) + 1;
+    level = startLevel + Math.floor(lines / 10);
     dropInterval = Math.max(100, 1000 - (level - 1) * 90);
     updateHUD();
   }
@@ -232,15 +233,34 @@ function togglePause() {
   if (gameOver) return;
   paused = !paused;
   if (!paused) {
+    overlay.classList.add('hidden');
+    overlay.classList.remove('paused-mode');
+    if (document.activeElement) document.activeElement.blur();
     lastTime = performance.now();
-    loop(lastTime);
+    dropAccum = 0;
+    animId = requestAnimationFrame(loop);
   } else {
     cancelAnimationFrame(animId);
-    overlayTitle.textContent = 'PAUSA';
-    overlayScore.textContent = '';
+    overlay.classList.add('paused-mode');
     overlay.classList.remove('hidden');
+    pauseControls.classList.add('hidden');
+    pauseLevelSelect.value = String(startLevel);
+    pauseResumeBtn.focus();
   }
 }
+
+// ---- Menú de pausa ----
+const pauseControls = document.getElementById('pause-controls');
+const pauseLevelSelect = document.getElementById('start-level');
+const pauseResumeBtn = document.getElementById('resume-btn');
+document.getElementById('pause-restart-btn').addEventListener('click', init);
+pauseResumeBtn.addEventListener('click', togglePause);
+document.getElementById('controls-btn').addEventListener('click', () => {
+  pauseControls.classList.toggle('hidden');
+});
+pauseLevelSelect.addEventListener('change', () => {
+  startLevel = parseInt(pauseLevelSelect.value, 10) || 1;
+});
 
 function loop(ts) {
   const dt = ts - lastTime;
@@ -263,34 +283,40 @@ function init() {
   board = createBoard();
   score = 0;
   lines = 0;
-  level = 1;
+  level = startLevel;
   paused = false;
   gameOver = false;
-  dropInterval = 1000;
+  dropInterval = Math.max(100, 1000 - (level - 1) * 90);
   dropAccum = 0;
   lastTime = performance.now();
   next = randomPiece();
   spawn();
   updateHUD();
   overlay.classList.add('hidden');
+  overlay.classList.remove('paused-mode'); // pausa: salir del modo menú
+  if (document.activeElement) document.activeElement.blur(); // Space/Enter no deben activar botones
   cancelAnimationFrame(animId);
   animId = requestAnimationFrame(loop);
 }
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'KeyP') { togglePause(); return; }
-  if (paused || gameOver) return;
+  if (e.code === 'KeyP' || e.code === 'Escape') { togglePause(); return; }
+  if (paused || gameOver) return; // con el menú abierto se ignoran las teclas de juego
   switch (e.code) {
     case 'ArrowLeft':
+      e.preventDefault();
       if (!collide(current.shape, current.x - 1, current.y)) current.x--;
       break;
     case 'ArrowRight':
+      e.preventDefault();
       if (!collide(current.shape, current.x + 1, current.y)) current.x++;
       break;
     case 'ArrowDown':
+      e.preventDefault();
       softDrop();
       break;
     case 'ArrowUp':
+      e.preventDefault();
     case 'KeyX':
       tryRotate();
       break;
