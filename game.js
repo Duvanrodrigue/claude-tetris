@@ -110,10 +110,10 @@ const SKINS = {
     grid: '#1a2430',
     ghostAlpha: 0.25,
     drawBlock(context, x, y, colorIndex, size, alpha) {
-      const px = x * size + 1, py = y * size + 1, s = size - 2, sub = s / 3;
+      const px = x * size + 1, py = y * size + 1, s = size - 2, sub = Math.floor(s / 3);
       context.globalAlpha = alpha ?? 1;
       context.fillStyle = this.colors[colorIndex];
-      context.fillRect(px, py, s, s);
+      context.fillRect(px, py, sub * 3, sub * 3);
       // textura 3x3 de subpixeles claros/oscuros
       for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
@@ -375,6 +375,7 @@ function init() {
 }
 
 document.addEventListener('keydown', e => {
+  if (e.target && e.target.tagName === 'SELECT') return; // no mover pieza desde el select
   if (e.code === 'KeyP') { togglePause(); return; }
   if (paused || gameOver) return;
   switch (e.code) {
