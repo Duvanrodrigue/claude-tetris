@@ -36,7 +36,7 @@ body {
 #board {
   display: block;
   border: 1px solid #2a2a3a;
-  background: #1a1a25;
+  background: var(--canvas-bg, #1a1a25);
   border-radius: 4px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
 }
@@ -74,7 +74,7 @@ body {
 #next-canvas {
   display: block;
   border: 1px solid #2a2a3a;
-  background: #1a1a25;
+  background: var(--canvas-bg, #1a1a25);
   border-radius: 4px;
 }
 
@@ -211,3 +211,73 @@ kbd {
 #records-list li.empty { font-style: italic; }
 #records-stats { color: #7aa2f7; font-size: 11px; }
 /* ---- Records: fin ---- */
+
+/* ---- Skins ---- */
+:root {
+  --canvas-bg: #1a1a25;
+}
+
+#skin-select {
+  background: #22223a;
+  color: #ccc;
+  border: 1px solid #3a3a5a;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+/* ---- Menú de pausa ---- */
+#overlay.paused-mode #gameover-box { display: none; }
+#overlay:not(.paused-mode) #pause-menu { display: none; }
+
+#pause-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #7aa2f7;
+}
+
+.menu-btn {
+  width: 180px;
+  background: #7aa2f7;
+  color: #0f0f17;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.menu-btn:hover, .menu-btn:focus-visible { background: #9bbdff; outline: none; }
+
+#pause-controls {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #aaa;
+  text-align: left;
+}
+
+#pause-controls.hidden { display: none; }
+
+#pause-controls li { display: flex; align-items: center; gap: 4px; }
+
+.menu-label {
+  font-size: 12px;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#start-level {
+  background: #22223a;
+  color: #e0e0e0;
+  border: 1px solid #3a3a5a;
+  border-radius: 4px;
+  padding: 3px 6px;
+}
